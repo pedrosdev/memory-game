@@ -1,31 +1,66 @@
-let options = ["monkey", "lion"];
+let cardOptions = [
+  "monkey",
+  "lion",
+  "bird",
+  "cat",
+  "dog",
+  "fox",
+  "hamster",
+  "bear",
+];
 
-let cards = [];
+const numberOfCards = 16;
 
-while (cards.length < 4) {
-  let randomIndex = Math.floor(Math.random() * options.length);
-  let randomOption = options[randomIndex];
+const cardsContainer = document.querySelector(".cards-container");
 
-  if (cards.includes(randomOption)) {
-    options = options.filter(option => option != randomOption);
+generateCards(cardsContainer, numberOfCards);
+
+function generateCards(container, number) {
+  for (let i = 0; i < number; i++) {
+    const card = document.createElement("div");
+    card.classList.add("card");
+    
+    const cardContent = document.createElement("div");
+    cardContent.classList.add("card-content");
+    const cardName = getCardName(cardOptions);
+    getCardContent(cardName).forEach((item) => {
+      cardContent.appendChild(item);
+    });
+
+    card.appendChild(cardContent);
+    container.appendChild(card);
   }
-
-  cards.push(randomOption);
 }
 
+function getCardName() {
+  const randomIndex = Math.floor(Math.random() * cardOptions.length);
+  const randomOption = cardOptions[randomIndex];
 
-let score = 0;
+  const currentCards = Array.from(
+    document.querySelectorAll(".card-name")
+  );
 
-while (score < 2) {
-  console.log(cards);
+  const cardNamesUsed = currentCards.map(item => item.textContent);
+  console.log(cardNamesUsed)
 
-  let firstChoice = prompt("Type your first choice");
-  let secondChoice = prompt("Type your second choice");
-  if (cards[firstChoice] == cards[secondChoice]) {
-    score++;
-
-    cards = cards.filter(card => card != cards[firstChoice]);
+  if (cardNamesUsed.map(item => item.toLowerCase())
+    .includes(randomOption)) {
+    cardOptions = cardOptions.filter(
+      option => option != randomOption
+    );
   }
+  
+  return randomOption;
 }
 
-console.log("You won!");
+function getCardContent(name) {
+  const cardImage = document.createElement("img");
+  cardImage.classList.add("card-image");
+  cardImage.src = `images/${name}.jpg`;
+  
+  const cardName = document.createElement("div");
+  cardName.classList.add("card-name");
+  cardName.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+
+  return [cardImage, cardName];
+}
