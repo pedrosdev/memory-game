@@ -15,14 +15,21 @@ const cardsContainer = document.querySelector(".cards-container");
 
 generateCards(cardsContainer, numberOfCards);
 
+const cards = document.querySelectorAll(".card");
+
+cards.forEach((card) => card.addEventListener("click", (e) => {
+  card.classList.toggle("hidden");
+}));
+
 function generateCards(container, number) {
   for (let i = 0; i < number; i++) {
     const card = document.createElement("div");
-    card.classList.add("card");
+    card.classList.add("card", "hidden");
     
     const cardContent = document.createElement("div");
     cardContent.classList.add("card-content");
-    const cardName = getCardName(cardOptions);
+
+    const cardName = getCardName();
     getCardContent(cardName).forEach((item) => {
       cardContent.appendChild(item);
     });
@@ -41,7 +48,6 @@ function getCardName() {
   );
 
   const cardNamesUsed = currentCards.map(item => item.textContent);
-  console.log(cardNamesUsed)
 
   if (cardNamesUsed.map(item => item.toLowerCase())
     .includes(randomOption)) {

@@ -58,3 +58,7 @@ h1 {
   width: 80px;
   height: 80px;
 }
+
+.hidden > * {
+  visibility: hidden;
+}
