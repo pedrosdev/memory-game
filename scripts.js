@@ -1,77 +1,89 @@
-let cardOptions = [
-  "monkey",
-  "lion",
-  "bird",
-  "cat",
-  "dog",
-  "fox",
-  "hamster",
-  "bear",
-];
+const cardsContainer = document.querySelector(".cards-container");
+
 
 const numberOfCards = 16;
 
-const cardsContainer = document.querySelector(".cards-container");
+playGame();
 
-generateCards(cardsContainer, numberOfCards);
+document.querySelector("#replay").addEventListener("click", (e) => {
+  document.querySelector(".modal").classList.remove("shown");
+  playGame();
+});
 
-const cards = document.querySelectorAll(".card");
+function playGame() {
+  let cardOptions = [
+    "monkey",
+    "lion",
+    "bird",
+    "cat",
+    "dog",
+    "fox",
+    "hamster",
+    "bear",
+  ];
 
-let playerScore = 0;
-let previousCard = "";
+  cardsContainer.innerHTML = "";
 
-cards.forEach((clickedCard) => clickedCard.addEventListener("click", playCard));
+  generateCards(cardsContainer, numberOfCards, cardOptions);
 
-function playCard(e) {
-  const currentCard = e.currentTarget;
-  currentCard.classList.add("shown");
+  const cards = document.querySelectorAll(".card");
 
-  if (!previousCard) {
-    previousCard = currentCard;
-  } else {
-    const cardA = previousCard;
-    const cardB = currentCard;
+  let playerScore = 0;
+  let previousCard = "";
 
-    if (checkEqualCards(cardA, cardB)) {
-      playerScore++;
-      fixCards(cardA, cardB);
+  cards.forEach((clickedCard) => clickedCard.addEventListener("click", playCard));
+
+  function playCard(e) {
+    const currentCard = e.currentTarget;
+    currentCard.classList.add("shown");
+
+    if (!previousCard) {
+      previousCard = currentCard;
     } else {
-      setTimeout(() => {
-        resetCards(cardA, cardB);
-      }, 1000);
-    }
+      const cardA = previousCard;
+      const cardB = currentCard;
 
-    previousCard = "";
+      if (checkEqualCards(cardA, cardB)) {
+        playerScore++;
+        fixCards(cardA, cardB);
+      } else {
+        setTimeout(() => {
+          resetCards(cardA, cardB);
+        }, 1000);
+      }
 
-    if (playerScore == numberOfCards / 2) {
-      finishGame();
+      previousCard = "";
+
+      if (playerScore == numberOfCards / 2) {
+        finishGame();
+      }
     }
+  }
+
+  function checkEqualCards(a, b) {
+    let [nameA, nameB] = [...[a, b].map((i) => i.querySelector(".card-name"))];
+
+    return nameA.textContent == nameB.textContent && nameA != nameB;
+  }
+
+  function resetCards(a, b) {
+    [a, b].forEach((i) => i.classList.remove("shown"));
+  }
+
+  function fixCards(a, b) {
+    if (a.classList.contains("shown") && b.classList.contains("shown")) {
+      [a, b].forEach(i => i.removeEventListener("click", playCard));
+    }
+  }
+
+  function finishGame() {
+    const modal = document.querySelector(".modal");
+
+    modal.classList.add("shown");
   }
 }
 
-function checkEqualCards(a, b) {
-  let [nameA, nameB] = [...[a, b].map((i) => i.querySelector(".card-name"))];
-  
-  return nameA.textContent == nameB.textContent && nameA != nameB;
-}
-
-function resetCards(a, b) {
-  [a, b].forEach((i) => i.classList.remove("shown"));
-}
-
-function fixCards(a, b) {
-  if (a.classList.contains("shown") && b.classList.contains("shown")) {
-    [a, b].forEach(i => i.removeEventListener("click", playCard));
-  }
-}
-
-function finishGame() {
-  const modal = document.querySelector(".modal");
-
-  modal.classList.add("shown");
-}
-
-function generateCards(container, number) {
+function generateCards(container, number, options) {
   for (let i = 0; i < number; i++) {
     const card = document.createElement("div");
     card.classList.add("card");
@@ -79,7 +91,7 @@ function generateCards(container, number) {
     const cardContent = document.createElement("div");
     cardContent.classList.add("card-content");
 
-    const cardName = getCardName();
+    const cardName = getCardName(options);
     getCardContent(cardName).forEach((item) => {
       cardContent.appendChild(item);
     });
@@ -89,9 +101,9 @@ function generateCards(container, number) {
   }
 }
 
-function getCardName() {
-  const randomIndex = Math.floor(Math.random() * cardOptions.length);
-  const randomOption = cardOptions[randomIndex];
+function getCardName(options) {
+  const randomIndex = Math.floor(Math.random() * options.length);
+  const randomOption = options[randomIndex];
 
   const currentCards = Array.from(
     document.querySelectorAll(".card-name")
@@ -101,9 +113,7 @@ function getCardName() {
 
   if (cardNamesUsed.map(item => item.toLowerCase())
     .includes(randomOption)) {
-    cardOptions = cardOptions.filter(
-      option => option != randomOption
-    );
+    options.splice(options.indexOf(randomOption), 1);
   }
   
   return randomOption;
