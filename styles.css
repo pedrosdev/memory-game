@@ -37,12 +37,15 @@ h1 {
 .card {
   flex: 1;
   flex-basis: 120px;
-  min-width: none;
   border-radius: 8px;
   padding: 10px;
   box-shadow: 0 0 4px #0e3a61;
   background-color: #f9fcff;
   cursor: pointer;
+}
+
+.card > * {
+  visibility: hidden;
 }
 
 .card-content {
@@ -53,12 +56,12 @@ h1 {
 
 .card-content > img {
   flex: auto;
-  min-width: none;
-  min-height: none;
+  min-width: 0;
+  min-height: 0;
   width: 80px;
   height: 80px;
 }
 
-.hidden > * {
-  visibility: hidden;
+.shown > * {
+  visibility: visible;
 }

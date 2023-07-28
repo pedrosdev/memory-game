@@ -17,14 +17,51 @@ generateCards(cardsContainer, numberOfCards);
 
 const cards = document.querySelectorAll(".card");
 
-cards.forEach((card) => card.addEventListener("click", (e) => {
-  card.classList.toggle("hidden");
-}));
+let playerScore = 0;
+let previousCard = "";
+
+cards.forEach((clickedCard) => clickedCard.addEventListener("click", playCard));
+
+function playCard(e) {
+  const currentCard = e.currentTarget;
+  currentCard.classList.add("shown");
+
+  if (!previousCard) {
+    previousCard = currentCard;
+  } else {
+    const cardA = previousCard;
+    const cardB = currentCard;
+
+    if (checkEqualCards(cardA, cardB)) {
+      playerScore++;
+      console.log(playerScore);
+      fixCards(cardA, cardB);
+    } else {
+      resetCards(cardA, cardB);
+    }
+
+    previousCard = "";
+  }
+}
+
+function checkEqualCards(a, b) {
+  let [nameA, nameB] = [...[a, b].map((i) => i.querySelector(".card-name"))];
+  
+  return nameA.textContent == nameB.textContent && nameA != nameB;
+}
+
+function resetCards(a, b) {
+  [a, b].forEach((i) => i.classList.remove("shown"));
+}
+
+function fixCards(a, b) {
+  [a, b].forEach(i => i.removeEventListener("click", playCard));
+}
 
 function generateCards(container, number) {
   for (let i = 0; i < number; i++) {
     const card = document.createElement("div");
-    card.classList.add("card", "hidden");
+    card.classList.add("card");
     
     const cardContent = document.createElement("div");
     cardContent.classList.add("card-content");
