@@ -34,7 +34,6 @@ function playCard(e) {
 
     if (checkEqualCards(cardA, cardB)) {
       playerScore++;
-      console.log(playerScore);
       fixCards(cardA, cardB);
     } else {
       setTimeout(() => {
@@ -43,6 +42,10 @@ function playCard(e) {
     }
 
     previousCard = "";
+
+    if (playerScore == numberOfCards / 2) {
+      finishGame();
+    }
   }
 }
 
@@ -60,6 +63,12 @@ function fixCards(a, b) {
   if (a.classList.contains("shown") && b.classList.contains("shown")) {
     [a, b].forEach(i => i.removeEventListener("click", playCard));
   }
+}
+
+function finishGame() {
+  const modal = document.querySelector(".modal");
+
+  modal.classList.add("shown");
 }
 
 function generateCards(container, number) {
