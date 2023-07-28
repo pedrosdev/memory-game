@@ -6,6 +6,10 @@ __Obs1__: This was one of the first games I have developed and I'm not sure abou
 
 __Obs2__: Some of the images aren't good, but for now I'm more concerned with the logic.
 
+## Live
+
+- [Memory Game](https://pedrosdev.github.io/memory-game/)
+
 ## Learning goals
 
 Get more practice with event handling and generating content dynamically using JavaScript, and start thinking a little more about UX.
