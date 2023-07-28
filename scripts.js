@@ -37,7 +37,9 @@ function playCard(e) {
       console.log(playerScore);
       fixCards(cardA, cardB);
     } else {
-      resetCards(cardA, cardB);
+      setTimeout(() => {
+        resetCards(cardA, cardB);
+      }, 1000);
     }
 
     previousCard = "";
@@ -55,7 +57,9 @@ function resetCards(a, b) {
 }
 
 function fixCards(a, b) {
-  [a, b].forEach(i => i.removeEventListener("click", playCard));
+  if (a.classList.contains("shown") && b.classList.contains("shown")) {
+    [a, b].forEach(i => i.removeEventListener("click", playCard));
+  }
 }
 
 function generateCards(container, number) {
