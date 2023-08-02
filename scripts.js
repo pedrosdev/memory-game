@@ -2,12 +2,9 @@ const cardsContainer = document.querySelector(".cards-container");
 
 const numberOfCards = 16;
 
-playGame();
+window.addEventListener("load", playGame);
 
-document.querySelector("#replay").addEventListener("click", (e) => {
-  document.querySelector(".modal").classList.remove("shown");
-  playGame();
-});
+document.querySelector("#replay").addEventListener("click", playGame);
 
 function playGame() {
   let cardOptions = [
@@ -20,22 +17,23 @@ function playGame() {
     "hamster",
     "bear",
   ];
-
+  
   cardsContainer.innerHTML = "";
-
+  document.querySelector(".modal").classList.remove("shown");
+  
   generateCards(cardsContainer, numberOfCards, cardOptions);
-
+  
   const cards = document.querySelectorAll(".card");
-
+  
   let playerScore = 0;
   let previousCard = "";
-
+  
   cards.forEach((clickedCard) => clickedCard.addEventListener("click", playCard));
-
+  
   function playCard(e) {
     const currentCard = e.currentTarget;
     currentCard.classList.add("shown");
-
+    
     if (!previousCard) {
       previousCard = currentCard;
     } else {
@@ -46,9 +44,7 @@ function playGame() {
         playerScore++;
         fixCards(cardA, cardB);
       } else {
-        setTimeout(() => {
           resetCards(cardA, cardB);
-        }, 1000);
       }
 
       previousCard = "";
